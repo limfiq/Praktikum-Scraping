@@ -8,6 +8,24 @@ Proyek ini melakukan scraping judul berita dari halaman `https://inet.detik.com/
 - `hasil_cleaning.xlsx` : Contoh output Excel hasil ekspor.
 - `venv/` : Virtual environment Python (opsional, jika digunakan).
 
+## Persiapan
+1. Buka terminal di folder `Pertemuan4`.
+2. Buat virtual environment (opsional tetapi direkomendasikan):
+
+```bash
+python -m venv venv
+```
+
+3. Aktifkan virtual environment di Windows:
+
+```bash
+.\venv\Scripts\Activate
+```
+
+4. Pastikan MySQL berjalan dan database `db_scraping` tersedia.
+
+5. Install dependensi Python.
+
 ## Dependensi
 Pastikan Python dan MySQL sudah terpasang.
 
@@ -52,6 +70,8 @@ CREATE TABLE tbl_berita (
 Tabel `hasil_cleaning` akan dibuat otomatis oleh script jika belum ada.
 
 ## Cara Menjalankan
+Pastikan virtual environment sudah aktif jika digunakan.
+
 Jalankan script dengan:
 
 ```bash

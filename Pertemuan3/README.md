@@ -10,6 +10,24 @@ Project ini melakukan scraping berita dari `https://inet.detik.com/`, menyimpan 
 - `Logs/` : Folder berisi file log `log_db.txt` untuk menyimpan aktivitas dan error.
 - `venv/` : Virtual environment Python (opsional).
 
+## Persiapan
+1. Buka terminal di folder `Pertemuan3`.
+2. Buat virtual environment (opsional tetapi direkomendasikan):
+
+```bash
+python -m venv venv
+```
+
+3. Aktifkan virtual environment di Windows:
+
+```bash
+.\venv\Scripts\Activate
+```
+
+4. Pastikan MySQL berjalan dan database `db_scraping` tersedia.
+
+5. Install dependensi Python.
+
 ## Dependensi
 Python packages yang digunakan:
 - `requests`
@@ -49,6 +67,8 @@ CREATE TABLE tbl_berita (
 ```
 
 ## Cara Menjalankan
+Pastikan virtual environment sudah aktif jika digunakan.
+
 Jalankan script dari dalam folder `Pertemuan3`:
 
 ```bash

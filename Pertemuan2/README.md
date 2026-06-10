@@ -9,6 +9,22 @@ Project ini melakukan scraping judul berita dari halaman `https://inet.detik.com
 - `Scrapling/` : Subfolder tambahan (isi subfolder dapat berisi latihan atau eksperimen scraping lain).
 - `venv/` : Virtual environment Python (opsional).
 
+## Persiapan
+1. Buka terminal di folder `Pertemuan2`.
+2. Buat virtual environment (opsional tetapi direkomendasikan):
+
+```bash
+python -m venv venv
+```
+
+3. Aktifkan virtual environment di Windows:
+
+```bash
+.\venv\Scripts\Activate
+```
+
+4. Install dependensi Python.
+
 ## Dependensi
 Python packages yang digunakan:
 - `requests`
@@ -21,6 +37,8 @@ pip install requests beautifulsoup4
 ```
 
 ## Cara Menjalankan
+Pastikan virtual environment sudah aktif jika digunakan.
+
 Jalankan script dari dalam folder `Pertemuan2`:
 
 ```bash
