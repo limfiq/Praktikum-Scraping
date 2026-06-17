@@ -9,12 +9,19 @@ def bersihkan_teks(teks):
     if teks is None:
         return teks
 
+    # Hapus tag HTML (seperti <p>, <br>, dll) menggunakan regex
+    teks = re.sub(r'<[^>]*>', '', teks)
+
+    # Hapus backslash (\)
+    teks = teks.replace('\\', '')
+
+    # Hapus Emoji dan simbol non-ASCII (seperti 👏, 🔥, dll)
+    # Karakter di luar rentang \x00-\x7F akan digantikan dengan spasi
+    teks = re.sub(r'[^\x00-\x7F]+', ' ', teks)
+
     # Hapus karakter whitespace berlebih dan newline
     teks = teks.strip()
     teks = " ".join(teks.split())
-
-    # Normalisasi Unicode dan hapus karakter non-printable
-    teks = re.sub(r"[\s\u00A0]+", " ", teks)
 
     return teks
 
@@ -66,7 +73,8 @@ def ambil_judul_detik():
                 url_link TEXT,
                 url_link_clean TEXT,
                 url_gambar TEXT,
-                waktu_scraping DATETIME
+                waktu_scraping DATETIME,
+                isi_berita TEXT
             )
             """
         )
@@ -87,25 +95,49 @@ def ambil_judul_detik():
 
                 cleaned_rows = []
 
-                for berita in daftar_berita[:25]:  # Ambil 25 berita pertama
+                for berita in daftar_berita[:100] :
                     img_tag = berita.find('img')
                     img_url = img_tag.get('src') if img_tag else None
                     judul_asli = " ".join(berita.text.split())
+
+                    # Tahap Cek Duplikasi: Cari judul di tabel tbl_berita
+                    cursor.execute("SELECT id FROM tbl_berita WHERE judul = %s", (judul_asli,))
+                    if cursor.fetchone():
+                        print(f"⏩ Dilewati (Sudah ada): {judul_asli[:50]}...")
+                        continue
+
                     judul_clean = bersihkan_teks(judul_asli)
                     url_link = berita.get('href')
                     url_link_clean = normalisasi_url(url_link)
 
+                    # Scraping Isi Berita (Deep Scraping)
+                    try:
+                        res_detail = requests.get(url_link, headers=headers, timeout=10)
+                        soup_detail = BeautifulSoup(res_detail.text, 'html.parser')
+
+                        # Hapus elemen script dan style agar kontennya tidak dianggap sebagai teks berita
+                        for element in soup_detail(['script', 'style']):
+                            element.decompose()
+
+                        # DetikInet biasanya menggunakan class detail__body-text untuk isi berita
+                        body = soup_detail.select_one('.detail__body-text')
+                        raw_isi = body.get_text(separator=' ', strip=True) if body else ""
+                    except Exception:
+                        raw_isi = "Gagal mengambil konten"
+
+                    isi_berita = bersihkan_teks(raw_isi)
+
                     # Simpan data mentah ke tabel tbl_berita
-                    sql_raw = "INSERT INTO tbl_berita (judul, url_link, url_gambar, waktu_scraping) VALUES (%s, %s, %s, %s)"
-                    val_raw = (judul_asli, url_link, img_url, waktu_sekarang)
+                    sql_raw = "INSERT INTO tbl_berita (judul, url_link, url_gambar, isi_berita, waktu_scraping) VALUES (%s, %s, %s, %s, %s)"
+                    val_raw = (judul_asli, url_link, img_url, isi_berita, waktu_sekarang)
                     cursor.execute(sql_raw, val_raw)
 
                     # Simpan data hasil cleaning ke tabel hasil_cleaning
                     sql_clean = (
-                        "INSERT INTO hasil_cleaning (judul_asli, judul_clean, url_link, url_link_clean, url_gambar, waktu_scraping) "
-                        "VALUES (%s, %s, %s, %s, %s, %s)"
+                        "INSERT INTO hasil_cleaning (judul_asli, judul_clean, url_link, url_link_clean, url_gambar, waktu_scraping, isi_berita) "
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     )
-                    val_clean = (judul_asli, judul_clean, url_link, url_link_clean, img_url, waktu_sekarang)
+                    val_clean = (judul_asli, judul_clean, url_link, url_link_clean, img_url, waktu_sekarang, isi_berita)
                     cursor.execute(sql_clean, val_clean)
 
                     cleaned_rows.append({
@@ -115,6 +147,7 @@ def ambil_judul_detik():
                         'url_link_clean': url_link_clean,
                         'url_gambar': img_url,
                         'waktu_scraping': waktu_sekarang,
+                        'isi_berita': isi_berita    
                     })
 
                     saved_count += 1

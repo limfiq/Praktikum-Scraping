@@ -16,7 +16,7 @@ interface Berita {
 export async function GET() {
   try {
     // Mengambil semua data dari tbl_berita diurutkan dari yang terbaru
-    const [rows] = await db.query('SELECT * FROM tbl_berita ORDER BY waktu_scraping DESC');
+    const [rows] = await db.query('SELECT * FROM hasil_cleaning ORDER BY waktu_scraping DESC');
 
     const dataBerita = rows as Berita[];
 
