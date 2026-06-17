@@ -51,7 +51,7 @@ Buat database jika belum ada:
 CREATE DATABASE db_scraping;
 ```
 
-Buat tabel `tbl_berita` contoh struktur minimal:
+Buat tabel `tbl_berita_inet` contoh struktur minimal:
 
 ```sql
 CREATE TABLE tbl_berita (
@@ -73,7 +73,7 @@ python index.py
 Script akan mengambil 10 berita teratas (sesuaikan `articles[:10]` di `index.py` untuk mengubah jumlah).
 
 ## Output
-- Data baru akan dimasukkan ke tabel `tbl_berita`.
+- Data baru akan dimasukkan ke tabel `tbl_berita_inet`.
 - Pesan proses dan jumlah data yang disimpan akan ditampilkan di konsol.
 
 ## Catatan
