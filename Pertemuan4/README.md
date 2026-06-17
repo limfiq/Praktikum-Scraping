@@ -1,7 +1,7 @@
 # Praktikum Scraping - Pertemuan 4
 
 ## Deskripsi
-Proyek ini melakukan scraping judul berita dari halaman `https://inet.detik.com/`, menyimpan data mentah ke database MySQL, melakukan proses pembersihan data, menyimpan hasil cleaning ke tabel `hasil_cleaning`, dan mengekspor data cleaned ke file Excel.
+Proyek ini melakukan scraping judul dan isi berita (Deep Scraping) dari halaman `https://inet.detik.com/`. Script melakukan validasi duplikasi data agar berita yang sama tidak disimpan berulang kali, melakukan pembersihan teks (menghapus tag HTML, backslash, emoji, dan karakter non-ASCII), menyimpan data ke database MySQL, serta mengekspor hasil pembersihan ke file Excel.
 
 ## Struktur Proyek
 - `index.py` : Script utama yang melakukan scraping, pembersihan data, penyimpanan ke database, dan ekspor ke Excel.
@@ -63,6 +63,7 @@ CREATE TABLE tbl_berita (
   judul TEXT,
   url_link TEXT,
   url_gambar TEXT,
+  isi_berita TEXT,
   waktu_scraping DATETIME
 );
 ```
