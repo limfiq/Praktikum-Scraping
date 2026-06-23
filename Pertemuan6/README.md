@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Praktikum Scraping – Pertemuan 6
 
-## Getting Started
+This repository contains the **Pertemuan 6** project for the Praktikum Data Scraping course at STIKOM PGRI Banyuwangi. The application is a **Next.js** based news‑scraping portal that demonstrates fetching data from a local API and displaying it in a clean, responsive UI.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **Simple Card Layout** – Displays news items in a responsive grid (1 column on mobile, 2 on tablet, 3 on desktop).
+- **Data Fetching** – Retrieves articles from the endpoint **`/api/berita`**.
+- **Image Handling** – Shows article images when available, with a graceful fallback for missing images.
+- **Date Formatting** – Parses timestamps and displays them in Indonesian locale, with a fallback message when the date is invalid.
+- **Basic Styling** – Uses Tailwind CSS for a clean look and integrates the Inter font via `next/font`.
+
+---
+
+## 🚀 Getting Started
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   # or using yarn
+   yarn install
+   ```
+
+2. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+3. Open your browser at **[http://localhost:3000](http://localhost:3000)** to view the portal.
+
+---
+
+## 🛠️ Usage
+
+- The front‑end fetches the list of news articles from **`/api/berita`**, which returns a JSON payload with fields such as `id`, `judul_asli`, `judul_clean`, `url_gambar`, `waktu_scraping`, and `isi_berita`.
+- Each article is displayed in a card showing the image, title, category badge, and formatted date.
+
+---
+
+## 📦 Project Structure
+
+```
+Pertemuan6/
+├─ src/
+│  └─ app/
+│     └─ page.tsx      # Main UI component
+├─ public/               # Static assets (if any)
+├─ README.md             # THIS FILE
+└─ next.config.ts        # Next.js configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📚 Learn More
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com) – utility‑first CSS framework used for styling.
+- [Inter Font on Google Fonts](https://fonts.google.com/specimen/Inter)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can deploy the app to **Vercel** with the following steps:
+1. Push the repository to GitHub.
+2. Import the project on Vercel and follow the automatic build process.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Feel free to open issues or submit pull requests if you have ideas for improvements or discover bugs.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+© {new Date().getFullYear()} Praktikum Data Scraping – STIKOM PGRI Banyuwangi
