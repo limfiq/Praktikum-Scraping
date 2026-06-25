@@ -25,22 +25,34 @@ export default function BeritaPage() {
   const [loading, setLoading] = useState(true);
   const [selectedBerita, setSelectedBerita] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const itemsPerPage = 9; // 3 columns x 3 rows per page
 
-  // Mengambil data dari API secara otomatis saat halaman dibuka
+  const loadBerita = async () => {
+    setRefreshing(true);
+    try {
+      const res = await fetch('/api/berita');
+      const json = await res.json();
+      if (json.success) {
+        setDaftarBerita(json.data);
+        setLastUpdated(json.data?.[0]?.waktu_scraping || null);
+      }
+    } catch (err) {
+      console.error('Gagal mengambil data API:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    fetch('/api/berita')
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) {
-          setDaftarBerita(json.data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Gagal mengambil data API:", err);
-        setLoading(false);
-      });
+    loadBerita();
+    const interval = setInterval(() => {
+      loadBerita();
+    }, 30000); // perbarui otomatis setiap 30 detik
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -55,9 +67,23 @@ export default function BeritaPage() {
     <div className={`${inter.className} min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50 flex flex-col`}>
       {/* HEADER */}
       <header className="bg-indigo-800 text-white shadow-lg p-4 flex items-center justify-between">
-        <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-wider">PORTAL DATA SCRAPING STIKOM</h1>
-          <span className="bg-blue-800 text-xs px-3 py-1.5 rounded-full font-mono">XAMPP & MySQL Active</span>
+        <div className="container mx-auto flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold tracking-wider">PORTAL DATA SCRAPING STIKOM</h1>
+            <p className="text-xs text-indigo-200 mt-1">
+              Last update: {lastUpdated ? formatDate(lastUpdated) : 'Sedang memuat...'}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="bg-blue-800 text-xs px-3 py-1.5 rounded-full font-mono">XAMPP & MySQL Active</span>
+            <button
+              className="px-4 py-2 bg-white text-indigo-800 rounded-full shadow hover:bg-indigo-50 transition-colors duration-200"
+              onClick={loadBerita}
+              disabled={refreshing}
+            >
+              {refreshing ? 'Menyegarkan...' : 'Refresh Data'}
+            </button>
+          </div>
         </div>
       </header>
 
